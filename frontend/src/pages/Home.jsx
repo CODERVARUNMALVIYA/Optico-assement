@@ -9,13 +9,13 @@ function Home() {
 
   return (
     <section className=" flex flex-col items-center">
-      <div className="flex justify-center my-5 md:my-7">
+      <div className="flex justify-center my-5 md:my-7 md:mt-0">
        <img alt="Vehicle Validation" class="w-64 h-64" src="https://vehicle-validation-mocha.vercel.app/vv.png"></img>
       </div>
 
       <div className="w-full max-w-md md:max-w-2xl  p-4 md:p-6 rounded-xl shadow-sm">
 
-        <div className="flex mt-[-40px] gap-2 items-center">
+        <div className="flex mt-[-40px] ml-8 gap-2 items-center">
           <input 
             value={search} 
             onChange={(e) => setSearch(e.target.value)} 
