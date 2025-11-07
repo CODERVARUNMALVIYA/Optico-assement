@@ -43,6 +43,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   'https://frontend-optico-assement.onrender.com',
+  'https://opticoassement.vercel.app',
   process.env.FRONTEND_URL 
 ];
 
