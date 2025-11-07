@@ -6,13 +6,27 @@ const vehicleSchema = new mongoose.Schema({
     required: [true, 'Vehicle number is required'],
     unique: true,
     uppercase: true,
-    trim: true
+    trim: true,
+    validate: {
+      validator: function(v) {
+        // Format: MP 04 ZH 7691 or MP04ZH7691 (with or without spaces)
+        return /^[A-Z]{2}\s?\d{2}\s?[A-Z]{1,2}\s?\d{4}$/i.test(v);
+      },
+      message: props => `${props.value} is not a valid vehicle number! Format: MP 04 ZH 7691`
+    }
   },
   passNumber: {
     type: String,
     required: [true, 'Pass number is required'],
     unique: true,
-    trim: true
+    uppercase: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        return /^[A-Z]{1,2}-?[A-Z0-9]{4,10}$/i.test(v);
+      },
+      message: props => `${props.value} is not a valid pass number! Format: T-25FD0001 or O-S45D001`
+    }
   },
   vehicleType: {
     type: String,

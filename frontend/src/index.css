@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .logo-gradient {
   background: radial-gradient(circle at 30% 30%, #ffeba8 0%, #ffff4dcd 25%, #f3ff47ee 50%, #ffff00ef 100%);
 }

@@ -17,13 +17,13 @@ Production mode
 npm start
 
 ## vehicle part
-// mujhe abhi schema mai validation dena hai ki like bo ese wrok kare exmple MP 04 HZ 2222
-create vehicle route
-update vehicle route
-all vehicle recoder show created
-id se vehicle search ho rha hai // baki hai abhi searching bala part jisa mai mujhe 
-update vehicle route
-delete vehicle route
+// mujhe abhi schema mai validation dena hai ki like bo ese wrok kare exmple MP 04 HZ 2222 -completed
+create vehicle route - completed 
+update vehicle route - completed
+all vehicle recoder show created - completed
+id se vehicle search ho rha hai // baki hai abhi searching bala part jisa mai mujhe - completed
+update vehicle route - completed
+delete vehicle route - completed
 
 ## admin part
 
