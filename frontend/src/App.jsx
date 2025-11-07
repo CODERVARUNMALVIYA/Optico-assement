@@ -6,6 +6,7 @@ import Add from './pages/Add';
 import Update from './pages/Update';
 import Display from './pages/Display';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 import { Route, Routes } from 'react-router-dom';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/update" element={<Update />} />
             <Route path="/display" element={<Display />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/login" element={<Login />} />
         </Routes>
         </main>
         <BottomNavbar />
