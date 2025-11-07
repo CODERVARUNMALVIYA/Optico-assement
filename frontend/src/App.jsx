@@ -4,8 +4,8 @@ import BottomNavbar from './components/BottomNavbar';
 import Home from './pages/Home';
 import Add from './pages/Add';
 import Update from './pages/Update';
-import Admin from './pages/Admin';
 import Display from './pages/Display';
+import Admin from './pages/Admin';
 import { Route, Routes } from 'react-router-dom';
 
 export default function App() {

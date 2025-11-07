@@ -152,3 +152,39 @@ export const deleteVehicle = async (req, res) => {
 };
 
 
+export const searchVehicles = async (req, res) => {
+  try {
+    const { query } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Search query is required' 
+      });
+    }
+    
+    const cleanQuery = query.replace(/[\s\-]+/g, '');
+    
+  
+    const regexPattern = cleanQuery.split('').join('[\\s\\-]?');
+    
+    const vehicles = await Vehicle.find({
+      isActive: true,
+      $or: [
+        { vehicleNumber: { $regex: cleanQuery, $options: 'i' } },
+        { passNumber: { $regex: regexPattern, $options: 'i' } },
+      ]
+    }).sort({ createdAt: -1 });
+    
+    res.json({ 
+      success: true, 
+      count: vehicles.length,
+      data: vehicles 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};

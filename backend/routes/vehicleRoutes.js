@@ -11,7 +11,7 @@ import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
-
+router.get('/search', protect, searchVehicles);
 router.get('/', protect, getAllVehicles);
 router.get('/:id', protect, getVehicleById);
 
