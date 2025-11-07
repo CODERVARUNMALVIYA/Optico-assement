@@ -1,8 +1,1 @@
-static_site: true
-build_command: npm run build
-publish_directory: dist
-
-redirects:
-  - source: /*
-    destination: /index.html
-    status: 200
+/*    /index.html   200
