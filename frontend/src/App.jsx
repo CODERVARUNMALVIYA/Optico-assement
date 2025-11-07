@@ -1,6 +1,7 @@
 import React from 'react'
 import TopNavbar from './components/TopNavbar';
 import BottomNavbar from './components/BottomNavbar';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Add from './pages/Add';
 import Update from './pages/Update';
@@ -15,11 +16,53 @@ export default function App() {
       <TopNavbar />
        <main className="flex-1 p-5 md:p-10 lg:p-12 flex flex-col items-center">
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/add" element={<Add />} />
-            <Route path="/update" element={<Update />} />
-            <Route path="/display" element={<Display />} />
-            <Route path="/admin" element={<Admin />} />
+            {/* Public route - All users can access after login */}
+            <Route 
+              path="/" 
+              element={
+                <ProtectedRoute allowedRoles={['Guard', 'Admin', 'SuperAdmin']}>
+                  <Home />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin and SuperAdmin only routes */}
+            <Route 
+              path="/add" 
+              element={
+                <ProtectedRoute allowedRoles={['Admin', 'SuperAdmin']}>
+                  <Add />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/update" 
+              element={
+                <ProtectedRoute allowedRoles={['SuperAdmin']}>
+                  <Update />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/display" 
+              element={
+                <ProtectedRoute allowedRoles={['Admin', 'SuperAdmin']}>
+                  <Display />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* SuperAdmin only route */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute allowedRoles={['SuperAdmin']}>
+                  <Admin />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Login route - No protection */}
             <Route path="/login" element={<Login />} />
         </Routes>
         </main>

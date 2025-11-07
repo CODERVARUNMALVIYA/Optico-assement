@@ -163,17 +163,53 @@ export const searchVehicles = async (req, res) => {
       });
     }
     
-    const cleanQuery = query.replace(/[\s\-]+/g, '');
+    const cleanQuery = query.trim().replace(/[\s\-]+/g, '');
     
-  
+    if (cleanQuery.length < 3) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid search - Please enter at least 3 characters' 
+      });
+    }
+    
+    const isLast4DigitsVehicle = /^\d{4}$/.test(cleanQuery);
+    
+    const isLast3DigitsPass = /^\d{3}$/.test(cleanQuery);
+    
+    const isFullVehicleNumber = /^[A-Z]{2}\d+[A-Z]+\d+$/i.test(cleanQuery) && cleanQuery.length >= 8;
+    
+    const isFullPassNumber = /^[A-Z]\d+[A-Z]*\d+$/i.test(cleanQuery) && cleanQuery.length >= 5;
+    
+    if (!isLast4DigitsVehicle && !isLast3DigitsPass && !isFullVehicleNumber && !isFullPassNumber) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid search!' 
+      });
+    }
+    
     const regexPattern = cleanQuery.split('').join('[\\s\\-]?');
+    
+    const searchConditions = [];
+    
+    if (isLast4DigitsVehicle) {
+      searchConditions.push({ vehicleNumber: { $regex: cleanQuery + '$', $options: 'i' } });
+    }
+    
+    if (isLast3DigitsPass) {
+      searchConditions.push({ passNumber: { $regex: cleanQuery + '$', $options: 'i' } });
+    }
+    
+    if (isFullVehicleNumber) {
+      searchConditions.push({ vehicleNumber: { $regex: regexPattern, $options: 'i' } });
+    }
+    
+    if (isFullPassNumber) {
+      searchConditions.push({ passNumber: { $regex: regexPattern, $options: 'i' } });
+    }
     
     const vehicles = await Vehicle.find({
       isActive: true,
-      $or: [
-        { vehicleNumber: { $regex: cleanQuery, $options: 'i' } },
-        { passNumber: { $regex: regexPattern, $options: 'i' } },
-      ]
+      $or: searchConditions
     }).sort({ createdAt: -1 });
     
     res.json({ 

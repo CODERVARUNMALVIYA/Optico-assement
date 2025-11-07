@@ -13,3 +13,17 @@ export const searchVehicles = async (query) => {
 };
 
 
+export const createVehicle = async (vehicleData) => {
+    const response = await client.post('/vehicles', vehicleData);
+    return response.data;
+};
+
+export const updateVehicle = async (id, vehicleData) => {
+    const response = await client.put(`/vehicles/${id}`, vehicleData);
+    return response.data;
+};
+
+export const deleteVehicle = async (id) => {
+    const response = await client.delete(`/vehicles/${id}`);
+    return response.data;
+};

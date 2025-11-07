@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
+import { register } from '../services/authService'
 
 function Admin() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+  
   const [formData, setFormData] = useState({
     fullName: '',
     mobile: '',
@@ -14,17 +19,59 @@ function Admin() {
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    setError(null)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    alert('User created: ' + JSON.stringify(formData, null, 2))
+    
+    try {
+      setLoading(true)
+      setError(null)
+      
+      await register(formData)
+      
+      setSuccess(true)
+      
+      // Reset form
+      setFormData({
+        fullName: '',
+        mobile: '',
+        role: 'Admin',
+        designation: '',
+        email: '',
+        address: '',
+        password: ''
+      })
+      
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
+      
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to create user. Please try again.')
+      console.error('Error creating user:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <section className="w-full max-w-lg mx-auto">
       <div className="bg-white p-8 rounded-xl shadow-sm">
         <h2 className="text-2xl text-center font-bold mb-6">Add New User</h2>
+        
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">
+            User created successfully!
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -36,7 +83,12 @@ function Admin() {
                 value={formData.fullName} 
                 onChange={(e) => handleChange('fullName', e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                pattern="[A-Za-z\s]+"
+                title="Only letters and spaces allowed"
+                minLength="2"
+                maxLength="50"
                 required
+                disabled={loading}
               />
             </label>
           </div>
@@ -46,11 +98,19 @@ function Admin() {
               <span className="text-sm font-medium text-gray-700 mb-2 block">Mobile Number</span>
               <input 
                 type="tel"
-                placeholder="Enter mobile number"
+                placeholder="Enter 10 digit mobile number"
                 value={formData.mobile} 
-                onChange={(e) => handleChange('mobile', e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  if (value.length <= 10) handleChange('mobile', value);
+                }}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                pattern="\d{10}"
+                title="Enter valid 10 digit mobile number"
+                minLength="10"
+                maxLength="10"
                 required
+                disabled={loading}
               />
             </label>
           </div>
@@ -85,7 +145,10 @@ function Admin() {
                 value={formData.designation} 
                 onChange={(e) => handleChange('designation', e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                minLength="2"
+                maxLength="50"
                 required
+                disabled={loading}
               />
             </label>
           </div>
@@ -100,6 +163,7 @@ function Admin() {
                 value={formData.email} 
                 onChange={(e) => handleChange('email', e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                disabled={loading}
               />
             </label>
           </div>
@@ -113,7 +177,10 @@ function Admin() {
                 onChange={(e) => handleChange('address', e.target.value)}
                 rows="3"
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 resize-none"
+                minLength="10"
+                maxLength="200"
                 required
+                disabled={loading}
               />
             </label>
           </div>
@@ -124,11 +191,14 @@ function Admin() {
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter password"
+                  placeholder="Enter password (min 6 characters)"
                   value={formData.password} 
                   onChange={(e) => handleChange('password', e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 pr-12"
+                  minLength="6"
+                  maxLength="20"
                   required
+                  disabled={loading}
                 />
                 <button
                   type="button"
@@ -154,9 +224,17 @@ function Admin() {
           <div className="pt-2">
             <button 
               type="submit"
-              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              disabled={loading}
             >
-              Create User
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Creating User...
+                </>
+              ) : (
+                'Create User'
+              )}
             </button>
           </div>
         </form>
