@@ -6,10 +6,30 @@ function BottomNavbar() {
   const [userRole, setUserRole] = useState(null)
 
   useEffect(() => {
-    const userData = localStorage.getItem('user')
-    if (userData) {
-      const user = JSON.parse(userData)
-      setUserRole(user.role)
+    // Get user role from localStorage on mount
+    const loadUserRole = () => {
+      const userData = localStorage.getItem('user')
+      if (userData) {
+        const user = JSON.parse(userData)
+        setUserRole(user.role)
+      } else {
+        setUserRole(null)
+      }
+    }
+
+    loadUserRole()
+
+    // Listen for custom storage events (for same-tab updates)
+    const handleStorageChange = () => {
+      loadUserRole()
+    }
+
+    window.addEventListener('userLogin', handleStorageChange)
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('userLogin', handleStorageChange)
+      window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
 

@@ -7,10 +7,27 @@ function TopNavbar() {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    // Get user from localStorage
-    const userData = localStorage.getItem('user')
-    if (userData) {
-      setUser(JSON.parse(userData))
+    // Get user from localStorage on mount
+    const loadUser = () => {
+      const userData = localStorage.getItem('user')
+      if (userData) {
+        setUser(JSON.parse(userData))
+      }
+    }
+
+    loadUser()
+
+    // Listen for custom storage events (for same-tab updates)
+    const handleStorageChange = () => {
+      loadUser()
+    }
+
+    window.addEventListener('userLogin', handleStorageChange)
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('userLogin', handleStorageChange)
+      window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
 

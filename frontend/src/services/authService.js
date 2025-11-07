@@ -10,6 +10,9 @@ export const login = async (mobile, password, role) => {
     if (response.data.success) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Trigger custom event to notify components
+        window.dispatchEvent(new Event('userLogin'));
     }
     
     return response.data;
@@ -23,6 +26,10 @@ export const register = async (userData) => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    
+    // Trigger custom event to notify components
+    window.dispatchEvent(new Event('storage'));
+    
     window.location.href = '/login';
 };
 
