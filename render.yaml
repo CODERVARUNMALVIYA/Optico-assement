@@ -3,6 +3,7 @@ services:
   - type: web
     name: frontend-optico-assement
     env: static
+    rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
@@ -20,6 +21,7 @@ services:
   - type: web
     name: backend-optico-assement
     env: node
+    rootDir: backend
     buildCommand: npm ci
     startCommand: npm start
     
