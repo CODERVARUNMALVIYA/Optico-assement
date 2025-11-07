@@ -16,17 +16,8 @@ export default function App() {
       <TopNavbar />
        <main className="flex-1 p-5 md:p-10 lg:p-12 flex flex-col items-center">
         <Routes>
-            {/* Public route - All users can access after login */}
-            <Route 
-              path="/" 
-              element={
-                <ProtectedRoute allowedRoles={['Guard', 'Admin', 'SuperAdmin']}>
-                  <Home />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/" element={<Home />} />
             
-            {/* Admin and SuperAdmin only routes */}
             <Route 
               path="/add" 
               element={
@@ -52,7 +43,6 @@ export default function App() {
               } 
             />
             
-            {/* SuperAdmin only route */}
             <Route 
               path="/admin" 
               element={
@@ -62,7 +52,6 @@ export default function App() {
               } 
             />
             
-            {/* Login route - No protection */}
             <Route path="/login" element={<Login />} />
         </Routes>
         </main>
