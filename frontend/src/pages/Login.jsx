@@ -1,31 +1,35 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../services/authService';
 
 function Login() {
-  const [mobile, setMobile] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState('Admin')
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-
   const navigate = useNavigate();
+  const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Admin');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const result = await login(mobile, password, role);
+    try {
+      const result = await login(mobile, password, role);
 
-    if (result.success) {
-      navigate('/');
-    } else {
-      setError(result.message || 'Login failed');
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.message || 'Login failed');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
