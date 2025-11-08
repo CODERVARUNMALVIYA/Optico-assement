@@ -6,13 +6,11 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   // Check if user is logged in
   if (!token) {
-    alert('Please login first!');
     return <Navigate to="/login" replace />;
   }
 
   // Check if user has required role
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    alert(`Access Denied! This page is only for ${allowedRoles.join(', ')} users.`);
     return <Navigate to="/" replace />;
   }
 

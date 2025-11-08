@@ -34,9 +34,17 @@ function BottomNavbar() {
   }, [])
 
   const handleRestrictedAccess = (e, requiredRoles, path) => {
+    // Check if user is not logged in
+    if (!userRole) {
+      e.preventDefault()
+      navigate('/login')
+      return
+    }
+
+    // Check if user doesn't have required role
     if (!requiredRoles.includes(userRole)) {
       e.preventDefault()
-      alert(`Access Denied! This page is only for ${requiredRoles.join(', ')} users.`)
+      // Do nothing - just prevent navigation
     }
   }
 

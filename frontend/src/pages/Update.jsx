@@ -67,10 +67,9 @@ function Update() {
         record._id === editingRecord._id ? response.data : record
       ))
       
-      alert('Vehicle updated successfully!')
+      // Vehicle updated successfully
       setEditingRecord(null)
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to update vehicle')
       console.error('Error updating vehicle:', err)
     } finally {
       setUpdateLoading(false)
@@ -90,10 +89,9 @@ function Update() {
         
         setRecords(records.filter(record => record._id !== recordId))
         
-        alert(`Vehicle ${vehicleNumber} deleted successfully`)
+        // Vehicle deleted successfully
       } catch (err) {
-        alert(err.response?.data?.message || 'Failed to delete vehicle')
-        console.error('Error deleting vehicle:', err)
+        console.error('Failed to delete vehicle:', err)
       } finally {
         setDeleteLoading(null)
       }
